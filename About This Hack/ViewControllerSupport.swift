@@ -2,6 +2,7 @@
 //  ViewControllerDisplays.swift
 //  ViewControllerDisplays
 //
+//  Created by Marc Nich on 8/26/21.
 //
 
 import Foundation
@@ -21,7 +22,7 @@ class ViewControllerSupport: NSViewController {
         }
     }
     @IBAction func whatsNewInMacOSPress(_ sender: NSButton) {
-        let url = URL(string: "https://www.apple.com/macos/ventura/")!
+        let url = URL(string: "https://help.apple.com/macos/sonoma/whats-new/")!
         if NSWorkspace.shared.open(url) {
             print("Browser Successfully opened")
         }
@@ -33,13 +34,19 @@ class ViewControllerSupport: NSViewController {
         }
     }
     @IBAction func HackintoshPress(_ sender: NSButton) {
-        let url = URL(string: "https://dortania.github.io/OpenCore-Install-Guide/troubleshooting/troubleshooting.html#table-of-contents")!
+        let url = URL(string: "https://github.com/CloverHackyColor/CloverBootloader/wiki")!
+        if NSWorkspace.shared.open(url) {
+            print("Browser Successfully opened")
+        }
+    }
+    @IBAction func HackCafeDiscordPress(_ sender: NSButton) {
+        let url = URL(string: "https://www.insanelymac.com/forum/")!
         if NSWorkspace.shared.open(url) {
             print("Browser Successfully opened")
         }
     }
     @IBAction func MacBasicsPress(_ sender: NSButton) {
-        let url = URL(string: "https://help.apple.com/macos/big-sur/mac-basics/")!
+        let url = URL(string: "https://help.apple.com/macos/ventura/mac-basics/")!
         if NSWorkspace.shared.open(url) {
             print("Browser Successfully opened")
         }

@@ -1,3 +1,12 @@
+//
+//  ViewController.swift
+//  About This Hack
+//
+//  Created by 8itCat on 8/20/21.
+//
+
+// NOTE: This code is horribly unoptimized. If you find anything at all that can make it better, please change it. This is my first time making a storyboard app this complicated.
+
 import Cocoa
 
 class ViewController: NSViewController {
@@ -14,62 +23,27 @@ class ViewController: NSViewController {
     @IBOutlet weak var ram: NSTextField!
     @IBOutlet weak var graphics: NSTextField!
     @IBOutlet weak var display: NSTextField!
-    @IBOutlet weak var startupDisk: NSTextField!
+  @IBOutlet weak var metal: NSTextField!
+  @IBOutlet weak var startupDisk: NSTextField!
     @IBOutlet weak var serialNumber: NSTextField!
-    @IBOutlet weak var serialToggle: NSButton!
-    @IBOutlet weak var blVersion: NSTextField!
-    @IBOutlet weak var blPrefix: NSTextField!
-    @IBOutlet weak var creditText: NSTextField!
+    @IBOutlet weak var ocVersion: NSTextField!
+    @IBOutlet weak var ocPrefix: NSTextField!
     
-    @IBOutlet weak var btSysInfo: NSButton!
-    @IBOutlet weak var btSoftUpd: NSButton!
+  
+  @IBAction func openSysInfo(_ sender: Any) {
+    _ = run("open /System/Applications/Utilities/System\\ Information.app")
+  }
+    
     
     var osNumber = run("sw_vers | grep ProductVersion | cut -c 17-")
     var modelID = "Mac"
     var ocLevel = "Unknown"
     var ocVersionID = "Version"
     
-    var fileManager = FileManager.default
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        _ = run("mkdir ~/.ath")
-        print("Directory created...")
-        func createFileIfNeeded(atPath path: String, withCommand command: String) {
-
-            if !fileManager.fileExists(atPath: path) {
-                _ = run(command)
-            }
-        }
-
-        // Example usage
-        let homeDirectory = NSHomeDirectory()
-        let hwFilePath = homeDirectory + "/.ath/hw.txt"
-        let sysmemFilePath = homeDirectory + "/.ath/sysmem.txt"
-        let sysvolnameFilePath = homeDirectory + "/.ath/sysvolname.txt"
-        let scrFilePath = homeDirectory + "/.ath/scr.txt"
-        let scrXmlFilePath = homeDirectory + "/.ath/scrXml.txt"
-        let oclpXmlFilePath = homeDirectory + "/.ath/oclp.txt"
-        let oclppatchplist = "/System/Library/CoreServices/OpenCore-Legacy-Patcher.plist"
-
-        createFileIfNeeded(atPath: hwFilePath, withCommand: "system_profiler SPHardwareDataType > \"\(hwFilePath)\"")
-        createFileIfNeeded(atPath: sysmemFilePath, withCommand: "system_profiler SPMemoryDataType > \"\(sysmemFilePath)\"")
-        createFileIfNeeded(atPath: sysvolnameFilePath, withCommand: "diskutil info / > \"\(sysvolnameFilePath)\"")
-        createFileIfNeeded(atPath: scrFilePath, withCommand: "system_profiler SPDisplaysDataType > \"\(scrFilePath)\"")
-        createFileIfNeeded(atPath: scrXmlFilePath, withCommand: "system_profiler SPDisplaysDataType -xml > \"\(scrXmlFilePath)\"")
-        if fileManager.fileExists(atPath: oclppatchplist) {
-            createFileIfNeeded(atPath: oclpXmlFilePath, withCommand: "egrep -A1 \"OpenCore Legacy Patcher|Time Patched|Commit URL\" " +  oclppatchplist + " > \"\(oclpXmlFilePath)\"")
-        }
-        print("Files created...")
-        Thread.sleep(forTimeInterval: 1)
+        start()
         
-        // Call Functions to init Overview
-        HCVersion.getVersion()
-        HCMacModel.getMacModel()
-        _ = HCCPU.getCPU()
-        _ = HCRAM.getRam()
-        _ = HCStartupDisk.getStartupDisk()
-        _ = HCDisplay.getDisp()
     }
     
 
@@ -79,24 +53,22 @@ class ViewController: NSViewController {
     }
 
     override func viewDidAppear() {
-        super.viewDidAppear()
         self.view.window?.styleMask.remove(NSWindow.StyleMask.resizable)
-
-        self.start()
-        setToolTips()
     }
+    
+
     func start() {
-        print("Initializing Main View...")
+        print("Initializing...")
+        HardwareCollector.getAllData()
         
-        if (!HardwareCollector.dataHasBeenSet) {HardwareCollector.getAllData()
-        
-        switch HCVersion.OSvers {
+        // Image
+        switch HardwareCollector.OSvers {
         case .SONOMA:
-            picture.image = NSImage(named: "Sonoma")
-            break
+          picture.image = NSImage(named: "Sonoma")
+          break
         case .VENTURA:
-            picture.image = NSImage(named: "Ventura")
-            break
+          picture.image = NSImage(named: "Ventura")
+          break
         case .MONTEREY:
             picture.image = NSImage(named: "Monterey")
             break
@@ -115,47 +87,66 @@ class ViewController: NSViewController {
         case .SIERRA:
             picture.image = NSImage(named: "Sierra")
             break
+        case .EL_CAPITAN:
+            picture.image = NSImage(named: "El Capitan")
+            break
+        case .YOSEMITE:
+            picture.image = NSImage(named: "Yosemite")
+            break
+        case .MAVERICKS:
+            picture.image = NSImage(named: "Mavericks")
+            break
         case .macOS:
             picture.image = NSImage(named: "Unknown")
             break
         }
-        
         // macOS Version Name
-        osVersion.stringValue = HCVersion.OSname
-
+        osVersion.stringValue = HardwareCollector.OSname
+        
         // macOS Version ID
-        systemVersion.stringValue = HCVersion.getOSnum() + HCVersion.OSBuildNum
-
+        systemVersion.stringValue = HardwareCollector.OSBuildNum
+        
         // Mac Model
-        macModel.stringValue = HCMacModel.macName + " - " + HCMacModel.getModelIdentifier()
-
+        macModel.stringValue = HardwareCollector.macName
+        
         // CPU
-        cpu.stringValue = HCCPU.getCPU()
+        cpu.stringValue = HardwareCollector.CPUstring
         
         // RAM
-        ram.stringValue = HCRAM.getRam()
-
+        ram.stringValue = HardwareCollector.RAMstring
+        
         // GPU
-        graphics.stringValue = HCGPU.getGPU()
-
+        graphics.stringValue = HardwareCollector.GPUstring
+        
         // Display
-        display.stringValue = HCDisplay.getDisp()
-
+        display.stringValue = HardwareCollector.DisplayString
+      
+      // Accelerator
+      metal.stringValue = HardwareCollector.metalString
+        
         // Startup Disk
-        startupDisk.stringValue = HCStartupDisk.getStartupDisk()
-
+        startupDisk.stringValue = HardwareCollector.StartupDiskString
+        
         // Serial Number
-        serialNumber.stringValue = HCSerialNumber.getSerialNumber()
-
-        // Bootloader Version (Optional)
-        blVersion.stringValue = HCBootloader.getBootloader()
-
-        // Make Serial Number Toggle Transparent
-        serialToggle.isTransparent = true
+        serialNumber.stringValue = HardwareCollector.SerialNumberString
+        
+        // OpenCore Version (Optional)
+        if HardwareCollector.qHackintosh {
+            ocVersion.stringValue = HardwareCollector.BootloaderString
+            ocVersion.isHidden = false
+            ocPrefix.isHidden = false
+        }
+        else {
+            ocVersion.isHidden = true
+            ocPrefix.isHidden = true
+            ocVersion.stringValue = ""
+        }
+        updateView()
     }
-}
+
     
     func updateView() {
+        // Update View
         picture.needsDisplay = true
         osVersion.needsDisplay = true
         systemVersion.needsDisplay = true
@@ -166,39 +157,8 @@ class ViewController: NSViewController {
         display.needsDisplay = true
         startupDisk.needsDisplay = true
         serialNumber.needsDisplay = true
-        blVersion.needsDisplay = true
+        ocVersion.needsDisplay = true
+      metal.needsDisplay = true
     }
     
-    func setToolTips(){
-        blPrefix.toolTip = blPrefixtoolTip
-        blVersion.toolTip   = blVersiontoolTip
-    }
-    
-    @IBAction func hideSerialNumber(_ sender: NSButton) {
-        print("Serial Number toggled")
-        if serialNumber.stringValue == "" {
-            serialNumber.stringValue = HCSerialNumber.getSerialNumber()
-        } else {
-            serialNumber.stringValue = ""
-        }
-    }
-
-    func showSerialNumber(_ sender: NSButton) {
-          print("Serial Number toggled")
-          if serialNumber.stringValue == HCSerialNumber.getSerialNumber() {
-              serialNumber.stringValue = ""
-          } else {
-              serialNumber.stringValue = HCSerialNumber.getSerialNumber()
-          }
-      }
-    
-    @IBAction func showSystemReport(_ sender: NSButton) {
-        print("System Report...")
-        _ = run("open /System/Library/SystemProfiler/SPPlatformReporter.spreporter")
-    }
-        
-    @IBAction func showSoftwareUpdate(_ sender: NSButton) {
-        print("Software Update...")
-        _ = run("open /System/Library/PreferencePanes/SoftwareUpdate.prefPane")
-    }
 }

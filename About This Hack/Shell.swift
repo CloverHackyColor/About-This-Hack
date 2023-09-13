@@ -2,23 +2,19 @@
 //  Shell.swift
 //  About This Hack
 //
+//  Created by 8itCat on 10/8/21.
 //
 
 import Foundation
 
 // Allows native runnning of Terminal commands
-func run(_ command: String) -> String {
-    let task = Process()
+func run(_ cmd: String) -> String {
     let pipe = Pipe()
-
-    task.standardOutput = pipe
-    task.arguments = ["-c", command]
-    task.launchPath = "/bin/zsh"
-    task.launch()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output = String(data: data, encoding: .utf8)!
-
-    return output
-    
+    let process = Process()
+    process.launchPath = "/bin/sh"
+    process.arguments = ["-c", String(format:"%@", cmd)]
+    process.standardOutput = pipe
+    let fileHandle = pipe.fileHandleForReading
+    process.launch()
+    return String(data: fileHandle.readDataToEndOfFile(), encoding: .utf8) ?? "Oops"
 }

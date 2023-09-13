@@ -2,13 +2,15 @@
 //  WindowController.swift
 //  NSTabView
 //
+//  Created by Szabolcs Toth on 11/19/18.
+//  Copyright © 2018 purzelbaum.hu. All rights reserved.
 //
 
 import Cocoa
 
 class WindowController: NSWindowController {
     
-    public var tabViewController: NSTabViewController?
+    var tabViewController: NSTabViewController?
     public var currentView: Int = 0
     @IBOutlet public weak var segmentedControl: NSSegmentedControl!
     
@@ -25,14 +27,5 @@ class WindowController: NSWindowController {
         let segCtrl = sender as! NSSegmentedControl
         currentView = segCtrl.selectedSegment
         self.tabViewController?.selectedTabViewItemIndex = currentView
-    }
-    public func changeView(new: Int) {
-        print("changed to \(new)")
-        self.tabViewController?.selectedTabViewItemIndex = new
-        if(segmentedControl != nil) {
-            segmentedControl.selectedSegment = new
-        }
-       /* let segCtrl = self.window?.toolbar?.items[1].view.
-        segCtrl.selectedSegment = new*/
     }
 }

@@ -2,6 +2,7 @@
 //  ViewControllerDisplays.swift
 //  ViewControllerDisplays
 //
+//  Created by Marc Nich on 8/26/21.
 //
 
 import Foundation
@@ -25,6 +26,6 @@ class ViewControllerService: NSViewController {
     }
     
     func start() {
-        print("Initializing Service View...")
+        print("Service View Initializing...")
     }
 }
