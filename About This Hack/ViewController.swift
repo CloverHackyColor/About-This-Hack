@@ -40,23 +40,50 @@ class ViewController: NSViewController {
     var ocLevel = "Unknown"
     var ocVersionID = "Version"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        start()
-        
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    _ = run("mkdir ~/.ath")
+    print("Directory created...")
+    func createFileIfNeeded(atPath path: String, withCommand command: String) {
+      let fileManager = FileManager.default
+      
+      if !fileManager.fileExists(atPath: path) {
+        _ = run(command)
+      }
     }
     
-
-    override var representedObject: Any? {
-        didSet {
-        }
-    }
-
-    override func viewDidAppear() {
-        self.view.window?.styleMask.remove(NSWindow.StyleMask.resizable)
-    }
+    // Example usage
+    let homeDirectory = NSHomeDirectory()
+    let hwFilePath = homeDirectory + "/.ath/hw.txt"
+    let sysmemFilePath = homeDirectory + "/.ath/sysmem.txt"
+    let sysvolnameFilePath = homeDirectory + "/.ath/sysvolname.txt"
+    let scrFilePath = homeDirectory + "/.ath/scr.txt"
+    let scrXmlFilePath = homeDirectory + "/.ath/scrXml.txt"
     
-
+    createFileIfNeeded(atPath: hwFilePath, withCommand: "system_profiler SPHardwareDataType > \"\(hwFilePath)\"")
+    createFileIfNeeded(atPath: sysmemFilePath, withCommand: "system_profiler SPMemoryDataType > \"\(sysmemFilePath)\"")
+    createFileIfNeeded(atPath: sysvolnameFilePath, withCommand: "diskutil info / > \"\(sysvolnameFilePath)\"")
+    createFileIfNeeded(atPath: scrFilePath, withCommand: "system_profiler SPDisplaysDataType > \"\(scrFilePath)\"")
+    createFileIfNeeded(atPath: scrXmlFilePath, withCommand: "system_profiler SPDisplaysDataType -xml > \"\(scrXmlFilePath)\"")
+    print("Files created...")
+    
+    
+  }
+  
+  
+  override var representedObject: Any? {
+    didSet {
+    }
+  }
+  
+  override func viewDidAppear() {
+    super.viewDidAppear()
+    self.view.window?.styleMask.remove(NSWindow.StyleMask.resizable)
+    
+    // Call Start Function
+    self.start()
+  }
     func start() {
         print("Initializing...")
         HardwareCollector.getAllData()

@@ -8,7 +8,7 @@
 import Foundation
 
 class HardwareCollector {
-    static var OSnum: String = "10.10.0"
+    static var OSnum: String = "13.10.10"
     static var OSvers: macOSvers = macOSvers.macOS
     static var OSname: String = ""
     static var OSBuildNum: String = "19G101"
@@ -32,7 +32,7 @@ class HardwareCollector {
     static var storageType: Bool = false
     static var storageData: String = ""
     static var storagePercent: Double = 0.0
-  static var metalString: String = ""
+    static var metalString: String = ""
 
     
     static func getAllData() {
@@ -61,7 +61,7 @@ class HardwareCollector {
         storageType = getStorageType()
         storageData = getStorageData()[0]
         storagePercent = Double(getStorageData()[1])!
-      metalString = getMetal()
+        metalString = getMetal()
         
         dataHasBeenSet = true
     }
@@ -75,11 +75,11 @@ class HardwareCollector {
         let numDispl = getNumDisplays()
         if numDispl == 1 {
             return [run("""
-echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 _spdisplays_resolution | grep string | cut -c 15- | cut -f1 -d"<")"
+echo "$(cat ~/.ath/scrXml.txt | grep -A2 _spdisplays_resolution | grep string | cut -c 15- | cut -f1 -d"<")"
 """) ]
         }
         else if (numDispl == 2) {
-            let tmp = run("system_profiler SPDisplaysDataType | grep Resolution | cut -c 23-")
+            let tmp = run("cat ~/.ath/scr.txt | grep Resolution | cut -c 23-")
             let tmpParts = tmp.components(separatedBy: "\n")
             return tmpParts
         }
@@ -90,14 +90,14 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 _spdisplays_resolutio
         let numDispl = getNumDisplays()
         if numDispl == 1 {
             return [run("""
-echo "$(system_profiler SPDisplaysDataType | grep "Display Type" | cut -c 25-)"
-echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|<' '/_name/{getline; print $3}')" | tr -d '\n'
+echo "$(cat ~/.ath/scr.txt  | grep "Display Type" | cut -c 25-)"
+echo "$(cat ~/.ath/scrXml.txt  | grep -A2 "</data>" | awk -F'>|<' '/_name/{getline; print $3}')" | tr -d '\n'
 """)] //
 
         }
         else if (numDispl == 2) {
             let tmp = run("""
-echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|<' '/_name/{getline; print $3}')" | tr -d '\n'
+echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getline; print $3}')" | tr -d '\n'
 """)
             let tmpParts = tmp.components(separatedBy: "\n")
             return tmpParts
@@ -107,16 +107,16 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|
     
     
     static func getNumDisplays() -> Int {
-        return Int(run("system_profiler SPDisplaysDataType | grep -c Resolution | tr -d '\n'")) ?? 0x0
+        return Int(run("cat ~/.ath/scr.txt | grep -c Resolution | tr -d '\n'")) ?? 0x0
     }
     static func hasBuiltInDisplay() -> Bool {
-        let tmp = run("system_profiler SPDisplaysDataType | grep Built-In | tr -d '\n'")
+        let tmp = run("cat ~/.ath/scr.txt | grep Built-In | tr -d '\n'")
         return !(tmp == "")
     }
   
   static func getClover() -> String {
     var cloverRev: String
-    cloverRev = run ("system_profiler SPHardwareDataType | grep Clover | cut -d \":\" -f2")
+    cloverRev = run ("cat ~/.ath/hw.txt | grep Clover | cut -d \":\" -f2")
     qHackintosh = true
     return "Clover  \(cloverRev)"
   }
@@ -149,7 +149,7 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|
   //          print("No opencore; hiding menu")
             return ""
         }
-        return "\(opencore1).\(opencore2).\(opencore3) \(opencoreType)"
+        return "OpenCore \(opencore1).\(opencore2).\(opencore3) \(opencoreType)"
     }
     
     
@@ -163,8 +163,8 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|
     }
     
   static func getGPU() -> String {
-    let graphicsTmp = run("system_profiler SPDisplaysDataType | grep 'Chipset' | sed 's/.*: //'")
-    let graphicsRAM  = run("system_profiler SPDisplaysDataType | grep VRAM | sed 's/.*: //'")
+    let graphicsTmp = run("cat ~/.ath/scr.txt | grep 'Chipset' | sed 's/.*: //'")
+    let graphicsRAM  = run("cat ~/.ath/scr.txt | grep VRAM | sed 's/.*: //'")
     let graphicsArray = graphicsTmp.components(separatedBy: "\n")
     let vramArray = graphicsRAM.components(separatedBy: "\n")
     _ = graphicsArray.count
@@ -178,9 +178,9 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|
   }
   
     static func getDisp() -> String {
-        var tmp = run("system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: //'")
+        var tmp = run("cat ~/.ath/scr.txt | grep Resolution | sed 's/.*: //'")
         if tmp.contains("(QHD"){
-            tmp = run("system_profiler SPDisplaysDataType | grep Resolution | sed 's/.*: //' | cut -c -11")
+            tmp = run("cat ~/.ath/scr.txt | grep Resolution | sed 's/.*: //' | cut -c -11")
         }
         if(tmp.contains("\n")) {
             let displayID = tmp.firstIndex(of: "\n")!
@@ -191,18 +191,18 @@ echo "$(system_profiler SPDisplaysDataType -xml | grep -A2 "</data>" | awk -F'>|
     }
   
   static func getMetal() -> String {
-    let tmp = run("system_profiler SPDisplaysDataType | grep Metal | cut -d \":\" -f2")
+    let tmp = run("cat ~/.ath/scr.txt | grep Metal | cut -d \":\" -f2")
     return tmp;
   }
     
     
   static func getRam() -> String {
     let ram = run("echo \"$(($(sysctl -n hw.memsize) / 1024 / 1024 / 1024))\" | tr -d '\n'")
-    let ramMan = run("system_profiler SPMemoryDataType  | grep 'Manufacturer' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramMan = run("cat ~/.ath/sysmem.txt  | grep 'Manufacturer' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Man: " + ramMan)
-    let ramType = run("system_profiler SPMemoryDataType  | grep 'Type' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramType = run("cat ~/.ath/sysmem.txt  | grep 'Type' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Type: " + ramType)
-    let ramSpeed = run("system_profiler SPMemoryDataType | grep 'Speed' | grep 'MHz' | awk '{print $2\" \"$3}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramSpeed = run("cat ~/.ath/sysmem.txt | grep 'Speed' | grep 'MHz' | awk '{print $2\" \"$3}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Speed: " + ramSpeed)
 
     let ramReturn = "\(ram)GB \(ramSpeed) \(ramType) \(ramMan)"
