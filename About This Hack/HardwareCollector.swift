@@ -198,11 +198,11 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
     
   static func getRam() -> String {
     let ram = run("echo \"$(($(sysctl -n hw.memsize) / 1024 / 1024 / 1024))\" | tr -d '\n'")
-    let ramMan = run("cat ~/.ath/sysmem.txt  | grep 'Manufacturer' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramMan = run("cat ~/.ath/sysmem.txt  | grep 'Manufacturer' | grep -v Empty | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Man: " + ramMan)
-    let ramType = run("cat ~/.ath/sysmem.txt  | grep 'Type' | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramType = run("cat ~/.ath/sysmem.txt  | grep 'Type' | grep -v Empty | awk '{print $2}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Type: " + ramType)
-    let ramSpeed = run("cat ~/.ath/sysmem.txt | grep 'Speed' | grep 'MHz' | awk '{print $2\" \"$3}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
+    let ramSpeed = run("cat ~/.ath/sysmem.txt | grep 'Speed' | grep -v Empty | grep 'MHz' | awk '{print $2\" \"$3}' | sed -n '1p'").trimmingCharacters(in: .whitespacesAndNewlines)
     print("RAM Speed: " + ramSpeed)
 
     let ramReturn = "\(ram)GB \(ramSpeed) \(ramType) \(ramMan)"
