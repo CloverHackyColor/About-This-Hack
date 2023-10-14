@@ -615,7 +615,7 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
         return ["""
 \(name)
 \(size)(\(available)Available)
-""",String(percent)]
+""",String(1 - percent)]
     }
     
     
