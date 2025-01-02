@@ -214,7 +214,7 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
         switch OSvers {
         case .MAVERICKS,.YOSEMITE,.EL_CAPITAN:
             return "OS X"
-        case .SIERRA,.HIGH_SIERRA,.MOJAVE,.CATALINA,.BIG_SUR,.MONTEREY,.VENTURA,.SONOMA,.macOS:
+        case .SIERRA,.HIGH_SIERRA,.MOJAVE,.CATALINA,.BIG_SUR,.MONTEREY,.VENTURA,.SONOMA,.SEQUOIA,.macOS:
             return "macOS"
         }
     }
@@ -228,6 +228,7 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
   static func setOSvers(osNumber: String) {
     let tmp = osNumber.prefix(2)
     switch tmp {
+    case "15": OSvers = macOSvers.SEQUOIA
     case "14": OSvers = macOSvers.SONOMA
     case "13": OSvers = macOSvers.VENTURA
     case "12": OSvers = macOSvers.MONTEREY
@@ -271,6 +272,8 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
           return "Ventura"
         case .SONOMA:
           return "Sonoma"
+        case .SEQUOIA:
+          return "Sequoia"
         case .macOS:
             return ""
         }
@@ -633,6 +636,7 @@ enum macOSvers {
     case MONTEREY
     case VENTURA
     case SONOMA
+    case SEQUOIA
     case macOS
 }
 enum macType {

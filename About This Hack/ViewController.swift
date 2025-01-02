@@ -93,6 +93,9 @@ class ViewController: NSViewController {
         case .SONOMA:
           picture.image = NSImage(named: "Sonoma")
           break
+        case .SEQUOIA:
+          picture.image = NSImage(named: "Sequoia")
+          break
         case .VENTURA:
           picture.image = NSImage(named: "Ventura")
           break
