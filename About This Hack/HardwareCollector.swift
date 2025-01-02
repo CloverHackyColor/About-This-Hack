@@ -132,7 +132,7 @@ echo "$(cat ~/.ath/scrXml.txt | grep -A2 "</data>" | awk -F'>|<' '/_name/{getlin
         opencore2 = run("nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version | cut -c 60- | cut -c -1 | tr -d '\n'")
         opencore3 = run("nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version | cut -c 61- | cut -c -1 | tr -d '\n'")
         opencoreType = run("nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version | cut -c 55- | cut -c -3 | tr -d '\n'")
-        if opencore2.contains("0") || opencore2.contains("1"){
+        if opencore1.contains("0") || opencore1.contains("1"){
             if opencoreType.contains("REL") {
                 opencoreType = "(Release)"
             } else if opencoreType.contains("N/A") {
