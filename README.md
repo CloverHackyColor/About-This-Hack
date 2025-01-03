@@ -34,7 +34,7 @@ The Storage tab presents your startup disk with its name, free and total storage
 
 ![Storage](https://github.com/CloverHackyColor/About-This-Hack/blob/main/Storage.png)
 
-The Support tab contains numerous links to provide support with your Mac or Hackintosh. Note that the Mac links point to Apple's website, and the Hackintosh ones point to Dortania's guide.
+The Support tab contains numerous links to provide support with your Mac or Hackintosh. Note that the Mac links point to Apple's website, and the Hackintosh ones point to Insanelymac forum.
 
 ![Support](https://github.com/CloverHackyColor/About-This-Hack/blob/main/Support.png)
 
