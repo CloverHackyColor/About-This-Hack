@@ -32,11 +32,11 @@ Or with only one display:
 
 The Storage tab presents your startup disk with its name, free and total storage, and a bar to indicate the amount used.
 
-<img width="692" alt="Storage Screen" src="https://user-images.githubusercontent.com/94565160/222528481-1379ebdf-912f-4df6-b1a6-9439f23a88ad.png">
+![Storage](https://github.com/CloverHackyColor/About-This-Hack/blob/main/Storage.png)
 
 The Support tab contains numerous links to provide support with your Mac or Hackintosh. Note that the Mac links point to Apple's website, and the Hackintosh ones point to Dortania's guide.
 
-<img width="692" alt="Support Screen" src="https://github.com/0xCUB3/About-This-Hack/assets/94565160/0ac9d6c5-a014-4939-b728-77073d5f1e53">
+![Support](https://github.com/CloverHackyColor/About-This-Hack/blob/main/Support.png)
 
 # Uninstall the App
 1) Delete the App (move it to the Bin)
