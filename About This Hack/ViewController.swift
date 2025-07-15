@@ -90,6 +90,9 @@ class ViewController: NSViewController {
         
         // Image
         switch HardwareCollector.OSvers {
+        case .TAHOE:
+          picture.image = NSImage(named: "Tahoe")
+          break
         case .SONOMA:
           picture.image = NSImage(named: "Sonoma")
           break
