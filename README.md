@@ -1,3 +1,5 @@
+The purpose of this fork is to make the opensource application to be compilable by non-Apple developer so to avoid signing.
+
 # About This Hack
 Discover your hardware on macOS with this simple, user-friendly hardware info app that retains the beloved design language of the classic 'About This Mac' interface, while gaining access to a wealth of additional features. Our app provides comprehensive information, including AMD Processor Support, display resolution, and much more. Whether you're on a Hackintosh or a real Mac, experience the best of all worlds with this intuitive and informative tool.<br>
 
@@ -13,6 +15,8 @@ Discover your hardware on macOS with this simple, user-friendly hardware info ap
 - Open `System Preferences` and go to `Security & Privacy`.
 - Under `General` you should see [this prompt](https://user-images.githubusercontent.com/79278890/111887197-c6a34800-89a9-11eb-83e2-9fd3d61e2c15.png):
 - Click "Open Anyway"
+5) If you changed something in OS or in hardware cleanup cache
+  rm -rf ~/.ath
 
 # Overview of Features
 
